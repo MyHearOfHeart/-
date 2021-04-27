@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MapTest</title>
+</head>
+<body>
+    <div>
+        <button onclick="receiveMap()">点击测试map</button>
+    </div>
+
+    <script>
+        function receiveMap() {
+
+            $.ajax({
+                url:'get',
+                type:'GET',
+                contentType:'application/json;charset=UTF-8',
+                success:function(user){
+                    alert(user);
+                    console.log(user['author']);
+                    console.log(user['video']);
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>
