@@ -12,7 +12,7 @@ import java.util.Map;
 @Controller
 public class UserController {
     //在线的用户
-    static Map<Long, User> users = Collections.synchronizedMap(new HashMap<Long, User>());
+    static Map<Integer, User> users = Collections.synchronizedMap(new HashMap<Integer, User>());
     AllService service=new AllService();
 
     //进入登录界面
@@ -29,32 +29,30 @@ public class UserController {
 
     //登录
     @PostMapping("/login")
+    @ResponseBody
     public User userLogin(@RequestBody User user) {
         // @RequestBody注解用来绑定通过http请求中application/json类型上传的数据
-        System.out.println(user.getName()+user.getPassword());
+        System.out.println(user.getMail()+user.getPassword());
         User res=service.Login(user);
-        if(res!=null){
-            if(res.getPassword()==user.getPassword()){
-                users.put(res.getUid(),res);
-            }
-            else {
+        if(res!=null) {
+            if (!res.getPassword().equals(user.getPassword())) {
                 System.out.println("密码错误");
+                return null;
+            } else {
+                if (!res.equals(users.get(res.getUid())))
+                    users.put(res.getUid(), res);
             }
         }
-        //返回查询到的对象
         return res;
     }
 
 
     //注册
     @PostMapping("/register")
+    @ResponseBody
     public User Register(@RequestBody User user) {
         // @RequestBody注解用来绑定通过http请求中application/json类型上传的数据
         user=service.Register(user);
-        //注册成功默认登录
-        if(user!=null){
-            users.put(user.getUid(),user);
-        }
         return user;
     }
 
