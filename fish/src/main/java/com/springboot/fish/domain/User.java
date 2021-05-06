@@ -7,7 +7,7 @@ import lombok.Data;
 // 该注解是lombok提供的，需要在pom中引入依赖，引入不成功先下载插件
 @Data
 public class User {
-    private Long uid;
+    private int uid;
     private String name;
     private String mail;
     private String password;

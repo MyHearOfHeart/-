@@ -26,7 +26,7 @@ public class UserConnect {
 
     //用名字查询账号
     public static  List<User> queryByName(String name){
-        String sql="select * from user where cname=?";
+        String sql="select * from custom where cname=?";
         ResultSet res=null;
         List<User> users= new ArrayList<>();
         try {
@@ -38,7 +38,7 @@ public class UserConnect {
             User user = new User();
             try {
                 while(res.next()){
-                    user.setUid(res.getLong("uid"));
+                    user.setUid(res.getInt("uid"));
                     user.setName(res.getString("name"));
                     user.setMail(res.getString("mail"));
                     user.setPassword(res.getString("password"));
@@ -69,17 +69,19 @@ public class UserConnect {
             User user = new User();
             try {
                 while(res.next()){
-                    user.setUid(res.getLong("uid"));
+                    user.setUid(res.getInt("uid"));
                     user.setName(res.getString("cname"));
                     user.setMail(res.getString("mail"));
                     user.setPassword(res.getString("password"));
                     users.add(user);
+                    //System.out.println(user);
                 }
             } catch (SQLException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             if(users.size()==1){
+                //System.out.println(user);
                 return user;
             }
         } catch (SQLException e) {
@@ -91,7 +93,7 @@ public class UserConnect {
     }
 
     //用id查询账号
-    public static User queryByUid(Long uid){
+    public static User queryByUid(int uid){
         String sql="select * from custom where uid=?";
         try {
             statement=connection.prepareStatement(sql);
@@ -103,7 +105,7 @@ public class UserConnect {
             User user = new User();
             try {
                 while(res.next()){
-                    user.setUid(res.getLong("uid"));
+                    user.setUid(res.getInt("uid"));
                     user.setName(res.getString("cname"));
                     user.setMail(res.getString("mail"));
                     user.setPassword(res.getString("password"));
