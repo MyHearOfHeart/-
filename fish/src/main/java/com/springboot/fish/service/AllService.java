@@ -1,14 +1,13 @@
 package com.springboot.fish.service;
 
 import com.springboot.fish.domain.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
-import java.util.logging.FileHandler;
+import java.util.Map;
 
 public class AllService {
     static Connection connection = null;
@@ -44,7 +43,10 @@ public class AllService {
     public static User Login(User us) {
         User user = uconn.queryByMail(us.getMail());
         //按理只有一个账号，返回用户对象
-        if(user!=null && user.getPassword()==us.getPassword()){
+        //System.out.println(us);
+        //System.out.println(user);
+        if(user!=null && user.getPassword().equals(us.getPassword())){
+            //System.out.println(user);
             return user;
         }
         //否则返回空
@@ -57,7 +59,7 @@ public class AllService {
     }
 
     //id名查询用户
-    public static User queryUserByUid(Long uid)
+    public static User queryUserByUid(int uid)
     {
         return uconn.queryByUid(uid);
     }
@@ -103,7 +105,7 @@ public class AllService {
     }
 
     //根据id查询某个视频信息
-    public static Video queryVideoByVid(Long vid){
+    public static Video queryVideoByVid(int vid){
         return vconn.queryByVid(vid);
     }
 
@@ -120,10 +122,14 @@ public class AllService {
     }
 
     //查询某个作者的视频
-    public static List<Video> queryVideoByAuthor(Long uid){
+    public static List<Video> queryVideoByAuthor(int uid){
         return vconn.queryByUid(uid);
     }
 
+    //查询所有视频
+    public static List<Video> queryAllVideos(){
+        return vconn.queryAllVideos();
+    }
 
     //根据标题查询视频
     public static List<Video> queryVideoByTitle(String title){
@@ -131,7 +137,7 @@ public class AllService {
     }
 
     //查询某个视频的评论
-    public static List<Comment> queryComment(Long vid){
+    public static List<Comment> queryComment(int vid){
         return cconn.queryByVid(vid);
     }
 
@@ -141,6 +147,42 @@ public class AllService {
         return succeed==1?true:false;
     }
 
+    //获取视频的评论
+    public static Map video(int vid){
+        Video video = queryVideoByVid(vid);
+        List<Comment> comments = queryComment(vid);
+        for(int i=0;i<comments.size();i++){
+            System.out.println(comments.get(i).getUid());
+        }
+        User user = queryUserByUid(video.getUid());
+        user.setPassword("");
+        Map map = new HashMap();
+        map.put("author",user);
+        map.put("video",video);
+        map.put("comment",comments);
+        return map;
+    }
+
+    //查询功能
+    public static Map searchAll(String keywords){
+        List<User> users = queryUserByName(keywords);
+        Map map = new HashMap();
+        map.put("author",users);
+        //搜索视频(标题)
+        List<Video> videos = queryVideoByTitle(keywords);
+        map.put("video",videos);
+        return map;
+    }
+
+    //查询一条具体的评论
+    public static Comment queryByCid(int cid){
+        return cconn.queryByCid(cid);
+    }
+
+    //删除一条评论
+    public static void deleteComment(int cid){
+        cconn.deleteComment(cid);
+    }
 
 
 }

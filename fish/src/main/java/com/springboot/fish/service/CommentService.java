@@ -1,8 +1,13 @@
 package com.springboot.fish.service;
 
+import com.springboot.fish.domain.Comment;
+import com.springboot.fish.domain.User;
+import com.springboot.fish.domain.Video;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.util.List;
+import java.util.Map;
 
 public class CommentService {
     //保存文件
@@ -15,7 +20,7 @@ public class CommentService {
             //文件类型
             String contentType=partfile.getContentType();
             //存储路径
-            String filepath="G://test//"+filename;
+            String filepath="G://IDEA//fish//src//main//resources//static//video//"+filename;
 
             File demofile=new File(filepath);
             //上传文件
@@ -25,6 +30,7 @@ public class CommentService {
             return false;
         }
     }
+
 
     //传送文件
 

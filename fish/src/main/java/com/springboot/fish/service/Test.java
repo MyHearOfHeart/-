@@ -8,17 +8,18 @@ public class Test {
 
     public static void main(String[] args) {
         //直接输出user对象：User(uid=null, name=null, mail=123456789@qq.com, password=123456)
-        //AllService service = new AllService();
+        AllService service = new AllService();
         User user=new User();
         user.setPassword("123456");
-        user.setMail("123456789@qq.com");
-        System.out.println(user);
+        user.setMail("18923456@qq.com");
+        User res = service.Login(user);
+        //System.out.println(res);
 
     }
 
     public static void userTest(AllService service){
         User user=new User();
-        user.setMail("123456789@qq.com");
+        user.setMail("18923456@qq.com");
         user.setPassword("123456");
         user=service.Register(user);
         System.out.println("注册"+user);

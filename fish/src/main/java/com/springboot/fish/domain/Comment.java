@@ -7,9 +7,9 @@ import java.util.Date;
 //评论信息
 @Data
 public class Comment {
-    private Long cid;
-    private Long vid;
-    private Long uid;
+    private int cid;
+    private int vid;
+    private int uid;
     private String text;
-    private Date time;
+    private String time;
 }
