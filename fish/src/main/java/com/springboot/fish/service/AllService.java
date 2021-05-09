@@ -5,6 +5,7 @@ import com.springboot.fish.domain.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -115,6 +116,12 @@ public class AllService {
         return succeed==1?true:false;
     }
 
+    //更新视频信息
+    public static boolean updateVideo(Video video){
+        int succeed=vconn.updateVideo(video);
+        return succeed==1?true:false;
+    }
+
     //删除一个视频
     public boolean deleteVideo(Video video){
         int succeed=vconn.deleteVideo(video);
@@ -182,6 +189,24 @@ public class AllService {
     //删除一条评论
     public static void deleteComment(int cid){
         cconn.deleteComment(cid);
+    }
+
+    //查询某个作者的所有视频所收到的评论
+    public static Map queryCommentByAuthor(int uid){
+        Map map = new HashMap();
+        //查询到该作者的所有视频
+        List<Video> videos = vconn.queryByUid(uid);
+        if(!videos.isEmpty()){
+            List comments = new ArrayList();
+            for(int i=0;i<videos.size();i++){
+                //根据vid查询评论
+                comments.addAll(cconn.queryByVid(videos.get(i).getVid()));
+            }
+            map.put("comment",comments);
+            return map;
+        }
+        map.put("comment","");
+        return map;
     }
 
 
