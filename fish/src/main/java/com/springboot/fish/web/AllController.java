@@ -57,24 +57,30 @@ public class AllController {
     //上传文件，用于网页
     @ResponseBody
     @PostMapping("/upfile")
-    public Map upFile(@RequestParam("file")  MultipartFile file,@RequestParam("uid") int uid){
+    public Map upFile(@RequestParam("file")  MultipartFile file,@RequestParam("uid") int uid,
+                      @RequestParam("text") String text, @RequestParam("radio") int tid){
         Map map = new HashMap();
         if (file.isEmpty()){
             System.out.println("文件为空！");
             map.put("result",false);
             return map;
         }
-        //保存数据
-        CommentService.saveFile(file);
         //插入视频
         Video video = new Video();
         video.setUid(uid);
-        video.setTid(1);
+        video.setTid(tid);
         video.setTitle(file.getOriginalFilename());
-        video.setText("默认动漫");
+        video.setText(text);
         video.setPicture("0");
-        video.setVideo("http://localhost:8081/static/video/"+file.getOriginalFilename());
+        video.setVideo("http://localhost:8081/static/video/");
         map.put("result",service.insertVideo(video));
+        List<Video> videos = service.queryAllVideos();
+        String filename = videos.get(videos.size()-1).getVid() + ".mp4";
+        video.setVid(videos.get(videos.size()-1).getVid());
+        video.setVideo("http://localhost:8081/static/video/"+filename);
+        service.updateVideo(video);
+        //保存数据
+        CommentService.saveFile(file,filename);
         return map;
     }
 
@@ -121,7 +127,7 @@ public class AllController {
             return map;
         }
         else if(action.equals("video")){
-            //获取视频的作者信息和评论信息
+            //获取视频的作者信息和该视频的评论信息
             int vid = Integer.parseInt(params.get("vid"));
             System.out.println(vid);
             //返回的是map类型，包含author，video和comment
@@ -146,6 +152,11 @@ public class AllController {
                 map.put("result",false);
                 return map;
             }
+        }
+        else if(action.equals("getAllComment")){
+            //获取其他人对自己视频的评论
+            int uid = Integer.parseInt(params.get("uid"));
+            return service.queryCommentByAuthor(uid);
         }
         return map;
     }
