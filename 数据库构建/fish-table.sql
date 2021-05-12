@@ -1,25 +1,29 @@
 use fish
 
 create table custom(
-userID int identity(4000,1) constraint PK_userID primary key,
-userName varchar(50),
+uid int identity(4000,1) constraint PK_userID primary key,
+uname varchar(50),
 password varchar(18) not null,
 mail varchar(30) not null 
 );
 
-create table movie(
-movieID int identity(4000,1) constraint PK_movieID primary key,
-userID int not null,
+create table video(
+vid int identity(4000,1) constraint PK_videoID primary key,
+uid int not null,
+tid int not null,
 title varchar(50) not null,
-path varchar(100) not null 
+text varchar(100) not null,
+video varchar(100) not null,
+picture varchar(100) not null
 );
 
 
 create table comment(
-commentID int identity(4000,1) constraint PK_commentID primary key, 
-movieID int not null,
-userID int not null,
-content varchar(100) not null
+cid int identity(4000,1) constraint PK_commentID primary key, 
+vid int not null,
+uid int not null,
+text varchar(100) not null,
+time varchar(100) not null
 );
 
 
