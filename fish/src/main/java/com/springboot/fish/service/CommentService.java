@@ -11,10 +11,8 @@ import java.util.Map;
 
 public class CommentService {
     //保存文件
-    public static boolean saveFile(MultipartFile partfile){
+    public static boolean saveFile(MultipartFile partfile,String filename){
         try{
-            //文件名
-            String filename=partfile.getOriginalFilename();
             //文件大小
             Long size=partfile.getSize();
             //文件类型
