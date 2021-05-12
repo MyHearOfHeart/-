@@ -1,9 +1,6 @@
 package com.springboot.fish.domain;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -97,6 +94,25 @@ public class VideoConnect {
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             System.out.println("插入失败");
+        }
+        return succeed;
+    }
+
+    //修改视频信息
+    public static int updateVideo(Video video){
+        String sql="update video set video=? where vid=?";
+        int succeed = 0;
+        try {
+            statement = connection.prepareStatement(sql);
+            System.out.println("初始化句柄");
+            statement.setString(1,video.getVideo());
+            statement.setInt(2,video.getVid());
+            succeed = statement.executeUpdate();
+            System.out.println("修改视频数据");
+            System.out.println(video.getVideo());
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            System.out.println("修改视频失败");
         }
         return succeed;
     }
